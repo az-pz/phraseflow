@@ -1,0 +1,31 @@
+{
+  "id": "words",
+  "order": 25,
+  "name": "Word shortcuts",
+  "description": "Short forms for long, frequently typed words and phrases.",
+  "defaults": { "trigger": "delimiter", "case": "adapt" },
+  "snippets": [
+    [";abt", "about"], [";acct", "account"], [";addl", "additional"], [";admin", "administrator"],
+    [";anniv", "anniversary"], [";approx", "approximately"], [";appt", "appointment"], [";asst", "assistant"],
+    [";avg", "average"], [";b4", "before"], [";bc", "because"], [";bday", "birthday"],
+    [";btwn", "between"], [";cust", "customer"], [";dept", "department"], [";diff", "difference"],
+    [";esp", "especially"], [";est", "estimated"], [";govt", "government"], [";hrs", "hours"],
+    [";info", "information"], [";intl", "international"], [";max", "maximum"], [";mgmt", "management"],
+    [";mgr", "manager"], [";min", "minimum"], [";mins", "minutes"], [";misc", "miscellaneous"],
+    [";msg", "message"], [";natl", "national"], [";num", "number"], [";org", "organization"],
+    [";pkg", "package"], [";pls", "please"], [";plz", "please"], [";ppl", "people"],
+    [";pref", "preference"], [";prob", "probably"], [";qty", "quantity"], [";ref", "reference"],
+    [";req", "requirement"], [";resp", "response"], [";sched", "schedule"], [";sec", "second"],
+    [";std", "standard"], [";tech", "technology"], [";tho", "though"], [";thru", "through"],
+    [";tmr", "tomorrow"], [";tmrw", "tomorrow"], [";w/", "with"], [";w/o", "without"],
+    [";w/e", "whatever"], [";wk", "week"], [";yr", "year"], [";yrs", "years"],
+    [";a11y", "accessibility"], [";arch", "architecture"], [";biz", "business"], [";cal", "calendar"],
+    [";comm", "communication"], [";conf", "conference"], [";corp", "corporation"], [";def", "definitely"],
+    [";doc", "document"], [";env", "environment"], [";exp", "experience"],
+    [";gov", "government"], [";impl", "implementation"], [";infra", "infrastructure"],
+    [";prod", "production"], [";proj", "project"], [";repo", "repository"], [";spec", "specification"],
+    [";approp", "appropriate"], [";apprec", "appreciate"], [";avail", "available"], [";convo", "conversation"],
+    [";gr8", "great"], [";l8r", "later"], [";obv", "obviously"], [";ofc", "of course"],
+    [";rly", "really"], [";srsly", "seriously"], [";togthr", "together"], [";ur", "your"]
+  ]
+}

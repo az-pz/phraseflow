@@ -1,0 +1,33 @@
+{
+  "id": "latex",
+  "order": 55,
+  "name": "LaTeX-style math & Greek",
+  "description": "Type LaTeX commands such as \\alpha, \\Delta, \\infty, \\leq or \\rightarrow followed by a space. Case-sensitive like LaTeX.",
+  "defaults": { "trigger": "delimiter", "case": "sensitive" },
+  "snippets": [
+    ["\\alpha", "α"], ["\\beta", "β"], ["\\gamma", "γ"], ["\\delta", "δ"], ["\\epsilon", "ε"], ["\\varepsilon", "ϵ"],
+    ["\\zeta", "ζ"], ["\\eta", "η"], ["\\theta", "θ"], ["\\vartheta", "ϑ"], ["\\iota", "ι"], ["\\kappa", "κ"],
+    ["\\lambda", "λ"], ["\\mu", "μ"], ["\\nu", "ν"], ["\\xi", "ξ"], ["\\omicron", "ο"], ["\\pi", "π"],
+    ["\\rho", "ρ"], ["\\sigma", "σ"], ["\\varsigma", "ς"], ["\\tau", "τ"], ["\\upsilon", "υ"], ["\\phi", "φ"],
+    ["\\varphi", "ϕ"], ["\\chi", "χ"], ["\\psi", "ψ"], ["\\omega", "ω"],
+    ["\\Gamma", "Γ"], ["\\Delta", "Δ"], ["\\Theta", "Θ"], ["\\Lambda", "Λ"], ["\\Xi", "Ξ"], ["\\Pi", "Π"],
+    ["\\Sigma", "Σ"], ["\\Upsilon", "Υ"], ["\\Phi", "Φ"], ["\\Psi", "Ψ"], ["\\Omega", "Ω"],
+    ["\\infty", "∞"], ["\\pm", "±"], ["\\mp", "∓"], ["\\times", "×"], ["\\div", "÷"], ["\\cdot", "⋅"],
+    ["\\ast", "∗"], ["\\circ", "∘"], ["\\bullet", "∙"], ["\\sqrt", "√"], ["\\sum", "∑"], ["\\prod", "∏"],
+    ["\\coprod", "∐"], ["\\int", "∫"], ["\\iint", "∬"], ["\\oint", "∮"], ["\\partial", "∂"], ["\\nabla", "∇"],
+    ["\\leq", "≤"], ["\\geq", "≥"], ["\\neq", "≠"], ["\\approx", "≈"], ["\\equiv", "≡"], ["\\sim", "∼"],
+    ["\\simeq", "≃"], ["\\cong", "≅"], ["\\propto", "∝"], ["\\ll", "≪"], ["\\gg", "≫"], ["\\prec", "≺"],
+    ["\\succ", "≻"], ["\\in", "∈"], ["\\notin", "∉"], ["\\ni", "∋"], ["\\subset", "⊂"], ["\\supset", "⊃"],
+    ["\\subseteq", "⊆"], ["\\supseteq", "⊇"], ["\\cup", "∪"], ["\\cap", "∩"], ["\\setminus", "∖"], ["\\emptyset", "∅"],
+    ["\\forall", "∀"], ["\\exists", "∃"], ["\\nexists", "∄"], ["\\neg", "¬"], ["\\land", "∧"], ["\\lor", "∨"],
+    ["\\oplus", "⊕"], ["\\otimes", "⊗"], ["\\top", "⊤"], ["\\bot", "⊥"], ["\\vdash", "⊢"], ["\\models", "⊨"],
+    ["\\therefore", "∴"], ["\\because", "∵"], ["\\angle", "∠"], ["\\perp", "⟂"], ["\\parallel", "∥"], ["\\degree", "°"],
+    ["\\aleph", "ℵ"], ["\\hbar", "ℏ"], ["\\ell", "ℓ"], ["\\Re", "ℜ"], ["\\Im", "ℑ"], ["\\wp", "℘"],
+    ["\\mathbb{N}", "ℕ"], ["\\mathbb{Z}", "ℤ"], ["\\mathbb{Q}", "ℚ"], ["\\mathbb{R}", "ℝ"], ["\\mathbb{C}", "ℂ"],
+    ["\\rightarrow", "→"], ["\\leftarrow", "←"], ["\\leftrightarrow", "↔"], ["\\Rightarrow", "⇒"], ["\\Leftarrow", "⇐"],
+    ["\\Leftrightarrow", "⇔"], ["\\uparrow", "↑"], ["\\downarrow", "↓"], ["\\mapsto", "↦"], ["\\to", "→"],
+    ["\\implies", "⟹"], ["\\iff", "⟺"], ["\\langle", "⟨"], ["\\rangle", "⟩"], ["\\lceil", "⌈"], ["\\rceil", "⌉"],
+    ["\\lfloor", "⌊"], ["\\rfloor", "⌋"], ["\\dots", "…"], ["\\cdots", "⋯"], ["\\vdots", "⋮"], ["\\ddots", "⋱"],
+    ["\\star", "⋆"], ["\\dagger", "†"], ["\\checkmark", "✓"], ["\\qed", "∎"]
+  ]
+}

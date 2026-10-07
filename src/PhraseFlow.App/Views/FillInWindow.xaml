@@ -1,0 +1,21 @@
+<Window x:Class="PhraseFlow.App.Views.FillInWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Fill in snippet" Width="500" SizeToContent="Height" ResizeMode="NoResize" Topmost="True" ShowInTaskbar="False"
+        WindowStartupLocation="Manual" Icon="/Assets/PhraseFlow.ico">
+    <DockPanel Margin="20,16,20,20">
+        <TextBlock x:Name="TitleText" DockPanel.Dock="Top" FontSize="18" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+        <TextBlock x:Name="SubtitleText" DockPanel.Dock="Top" Style="{StaticResource CaptionText}" Margin="0,2,0,8" />
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+            <Button Content="Insert" IsDefault="True" Style="{DynamicResource AccentButtonStyle}" Click="Insert_Click" MinWidth="100" Padding="12,6" />
+            <Button Content="Cancel" IsCancel="True" Margin="8,0,0,0" MinWidth="100" Padding="12,6" />
+        </StackPanel>
+        <Border DockPanel.Dock="Bottom" Background="{DynamicResource SubtleFillColorSecondaryBrush}" CornerRadius="6" Padding="10,8">
+            <ScrollViewer MaxHeight="170" VerticalScrollBarVisibility="Auto">
+                <TextBlock x:Name="PreviewText" TextWrapping="Wrap" />
+            </ScrollViewer>
+        </Border>
+        <TextBlock DockPanel.Dock="Bottom" Text="Preview" Style="{StaticResource FieldLabel}" />
+        <StackPanel x:Name="FieldsPanel" />
+    </DockPanel>
+</Window>

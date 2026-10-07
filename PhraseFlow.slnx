@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/PhraseFlow.App/PhraseFlow.App.csproj" />
+    <Project Path="src/PhraseFlow.Core/PhraseFlow.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/PhraseFlow.Core.Tests/PhraseFlow.Core.Tests.csproj" />
+    <Project Path="tests/PhraseFlow.E2E/PhraseFlow.E2E.csproj" />
+  </Folder>
+</Solution>

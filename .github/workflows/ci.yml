@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Restore
+        run: dotnet restore PhraseFlow.slnx
+
+      - name: Build
+        run: dotnet build PhraseFlow.slnx -c Release --no-restore
+
+      - name: Unit tests
+        run: dotnet test --project tests/PhraseFlow.Core.Tests/PhraseFlow.Core.Tests.csproj -c Release --no-build
+
+      - name: Package
+        shell: pwsh
+        run: ./build.ps1 -SkipTests
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PhraseFlow
+          path: dist/*.zip
+          if-no-files-found: error

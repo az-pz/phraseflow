@@ -1,0 +1,21 @@
+{
+  "id": "contractions",
+  "order": 15,
+  "name": "Contractions",
+  "description": "Adds the missing apostrophe: dont → don't, im → I'm, youre → you're.",
+  "defaults": { "trigger": "delimiter", "case": "adapt" },
+  "snippets": [
+    ["aint", "ain't"], ["arent", "aren't"], ["couldnt", "couldn't"], ["couldve", "could've"],
+    ["didnt", "didn't"], ["doesnt", "doesn't"], ["dosent", "doesn't"], ["dont", "don't"],
+    ["hadnt", "hadn't"], ["hasnt", "hasn't"], ["havent", "haven't"], ["hed", "he'd"],
+    ["heres", "here's"], ["hows", "how's"], ["im", "I'm"], ["isnt", "isn't"],
+    ["itd", "it'd"], ["itll", "it'll"], ["ive", "I've"], ["mightve", "might've"],
+    ["mustnt", "mustn't"], ["mustve", "must've"], ["neednt", "needn't"], ["shes", "she's"],
+    ["shouldnt", "shouldn't"], ["shouldve", "should've"], ["thats", "that's"], ["theres", "there's"],
+    ["theyd", "they'd"], ["theyll", "they'll"], ["theyre", "they're"], ["theyve", "they've"],
+    ["wasnt", "wasn't"], ["werent", "weren't"], ["weve", "we've"], ["whats", "what's"],
+    ["whens", "when's"], ["wheres", "where's"], ["whos", "who's"], ["whove", "who've"],
+    ["wouldnt", "wouldn't"], ["wouldve", "would've"], ["yall", "y'all"], ["youd", "you'd"],
+    ["youll", "you'll"], ["youre", "you're"], ["youve", "you've"], ["didint", "didn't"]
+  ]
+}

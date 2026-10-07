@@ -1,0 +1,518 @@
+<Window x:Class="PhraseFlow.App.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:PhraseFlow.App.ViewModels"
+        xmlns:views="clr-namespace:PhraseFlow.App.Views"
+        Title="PhraseFlow" Width="1320" Height="840" MinWidth="980" MinHeight="620"
+        WindowStartupLocation="CenterScreen" Icon="/Assets/PhraseFlow.ico">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" Margin="20,12,20,4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Image Source="/Assets/PhraseFlow.png" Width="40" Height="40" RenderOptions.BitmapScalingMode="HighQuality" />
+            <StackPanel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center">
+                <TextBlock Text="PhraseFlow" FontSize="22" FontWeight="SemiBold" />
+                <TextBlock Style="{StaticResource SecondaryText}" Text="Type a keyword, get the whole phrase, anywhere in Windows." />
+            </StackPanel>
+            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                <Button Command="{Binding ShowPickerCommand}" ToolTip="{Binding PickerHint}" Padding="12,6" Margin="0,0,8,0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="&#xE721;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" VerticalAlignment="Center" Margin="0,0,8,0" />
+                        <TextBlock Text="Search snippets" />
+                    </StackPanel>
+                </Button>
+                <ToggleButton x:Name="EnabledToggle" IsChecked="{Binding Settings.ExpansionEnabled}" Padding="12,6" MinWidth="170"
+                              ToolTip="Turn automatic expansion on or off everywhere">
+                    <Grid>
+                        <TextBlock Text="●  Expansion on" Visibility="{Binding Settings.ExpansionEnabled, Converter={StaticResource BoolToVisibility}}" />
+                        <TextBlock Text="⏸  Expansion paused" Visibility="{Binding Settings.ExpansionEnabled, Converter={StaticResource InverseBoolToVisibility}}" />
+                    </Grid>
+                </ToggleButton>
+            </StackPanel>
+        </Grid>
+
+        <TabControl Grid.Row="1" Margin="12,4,12,0" x:Name="Tabs">
+            <!-- ============================== SNIPPETS ============================== -->
+            <TabItem Header="Snippets">
+                <Grid Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="270" MinWidth="200" />
+                        <ColumnDefinition Width="8" />
+                        <ColumnDefinition Width="*" MinWidth="380" />
+                        <ColumnDefinition Width="8" />
+                        <ColumnDefinition Width="430" MinWidth="340" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Groups -->
+                    <Border Style="{StaticResource Pane}">
+                        <DockPanel>
+                            <DockPanel DockPanel.Dock="Top" Margin="0,0,0,4">
+                                <Button DockPanel.Dock="Right" Command="{Binding NewGroupCommand}" ToolTip="New group" Padding="8,3">
+                                    <TextBlock Text="&#xE710;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" />
+                                </Button>
+                                <TextBlock Text="GROUPS" Style="{StaticResource SectionHeader}" VerticalAlignment="Center" />
+                            </DockPanel>
+                            <StackPanel DockPanel.Dock="Bottom" Margin="0,8,0,0">
+                                <Button Command="{Binding ImportCommand}" HorizontalAlignment="Stretch" Margin="0,0,0,6" Content="Import snippets…"
+                                        ToolTip="PhraseFlow/Beeftext JSON, CSV/TSV (TextExpander), AutoHotkey .ahk, espanso .yml" />
+                                <Button Command="{Binding ExportAllCommand}" HorizontalAlignment="Stretch" Content="Export all…" />
+                            </StackPanel>
+                            <ListBox x:Name="GroupList" HorizontalContentAlignment="Stretch" AutomationProperties.Name="Groups" ItemsSource="{Binding Groups}" SelectedItem="{Binding SelectedGroup}"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" BorderThickness="0" Background="Transparent">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type vm:GroupItem}">
+                                        <Grid Margin="0,1">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <CheckBox IsChecked="{Binding Group.Enabled}" MinWidth="0" Margin="0,0,6,0" VerticalAlignment="Center"
+                                                      ToolTip="Enable or disable every snippet in this group"
+                                                      Visibility="{Binding IsAll, Converter={StaticResource InverseBoolToVisibility}}" />
+                                            <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+                                                       ToolTip="{Binding Group.Description}" />
+                                            <Border Grid.Column="2" Style="{StaticResource Badge}" Margin="6,0,0,0">
+                                                <TextBlock Text="{Binding Count, StringFormat={}{0:N0}}" FontSize="11" />
+                                            </Border>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                                <ListBox.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Group settings…" Command="{Binding EditGroupCommand}" />
+                                        <MenuItem Header="Change keyword prefix…" Command="{Binding ChangeGroupPrefixCommand}" />
+                                        <MenuItem Header="Export group…" Command="{Binding ExportGroupCommand}" />
+                                        <Separator />
+                                        <MenuItem Header="New group…" Command="{Binding NewGroupCommand}" />
+                                        <MenuItem Header="Delete group…" Command="{Binding DeleteGroupCommand}" />
+                                    </ContextMenu>
+                                </ListBox.ContextMenu>
+                            </ListBox>
+                        </DockPanel>
+                    </Border>
+
+                    <GridSplitter Grid.Column="1" Width="8" HorizontalAlignment="Stretch" Background="Transparent" />
+
+                    <!-- Snippet list -->
+                    <DockPanel Grid.Column="2">
+                        <Grid DockPanel.Dock="Top" Margin="0,0,0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid>
+                                <TextBox x:Name="SearchBox" AutomationProperties.Name="Filter snippets" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" Padding="30,6,8,6" />
+                                <TextBlock Text="&#xE721;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" IsHitTestVisible="False"
+                                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" VerticalAlignment="Center" Margin="10,0,0,0" />
+                                <TextBlock Text="Filter by keyword, name or text…" IsHitTestVisible="False" Margin="32,0,0,0" VerticalAlignment="Center"
+                                           Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                           Visibility="{Binding SearchText, Converter={StaticResource EmptyToVisible}}" />
+                            </Grid>
+                            <Button Grid.Column="1" Command="{Binding NewSnippetCommand}" Style="{DynamicResource AccentButtonStyle}" Margin="8,0,0,0" Padding="14,6">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE710;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" VerticalAlignment="Center" Margin="0,0,8,0" />
+                                    <TextBlock Text="New snippet" />
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                        <DataGrid x:Name="SnippetGrid" AutomationProperties.Name="Snippet list" ItemsSource="{Binding SnippetsView}" SelectedItem="{Binding SelectedSnippet}"
+                                  AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Extended" HeadersVisibility="Column"
+                                  GridLinesVisibility="None" CanUserResizeRows="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                                  EnableRowVirtualization="True" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling"
+                                  SelectionChanged="SnippetGrid_SelectionChanged" PreviewKeyDown="SnippetGrid_PreviewKeyDown">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="✓" Width="52" SortMemberPath="Snippet.Enabled">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox IsChecked="{Binding Snippet.Enabled, UpdateSourceTrigger=PropertyChanged}" MinWidth="0" HorizontalAlignment="Center" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Keyword" Width="150" SortMemberPath="Snippet.Keyword">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Snippet.Keyword}" Style="{StaticResource KeywordText}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Expands to" Binding="{Binding Snippet.Preview}" Width="*" MinWidth="120" SortMemberPath="Snippet.Content" />
+                                <DataGridTextColumn Header="Group" Binding="{Binding Group.Name}" Width="140" />
+                                <DataGridTextColumn Header="Uses" Binding="{Binding Snippet.UseCount}" Width="76" />
+                            </DataGrid.Columns>
+                            <DataGrid.ContextMenu>
+                                <ContextMenu x:Name="GridMenu" Opened="GridMenu_Opened">
+                                    <MenuItem Header="Duplicate" Command="{Binding DuplicateSnippetCommand}" />
+                                    <MenuItem Header="Enable" Command="{Binding EnableSelectedCommand}" />
+                                    <MenuItem Header="Disable" Command="{Binding DisableSelectedCommand}" />
+                                    <MenuItem x:Name="MoveToMenu" Header="Move to group" />
+                                    <Separator />
+                                    <MenuItem Header="Delete" Command="{Binding DeleteSnippetsCommand}" InputGestureText="Del" />
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
+                        </DataGrid>
+                    </DockPanel>
+
+                    <GridSplitter Grid.Column="3" Width="8" HorizontalAlignment="Stretch" Background="Transparent" />
+
+                    <!-- Editor -->
+                    <Border Grid.Column="4" Style="{StaticResource Pane}" Padding="0">
+                        <Grid>
+                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="24"
+                                        Visibility="{Binding HasSelection, Converter={StaticResource InverseBoolToVisibility}}">
+                                <TextBlock Text="&#xE70F;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="36" HorizontalAlignment="Center"
+                                           Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                                <TextBlock Text="Select a snippet to edit it, or create a new one." Style="{StaticResource SecondaryText}" Margin="0,12,0,0" TextAlignment="Center" />
+                            </StackPanel>
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" Visibility="{Binding HasSelection, Converter={StaticResource BoolToVisibility}}">
+                                <StackPanel Margin="16,8,16,16" DataContext="{Binding}">
+                                    <TextBlock Text="Keyword" Style="{StaticResource FieldLabel}" />
+                                    <TextBox x:Name="KeywordBox" AutomationProperties.Name="Keyword" Text="{Binding SelectedSnippet.Snippet.Keyword, UpdateSourceTrigger=PropertyChanged}"
+                                             FontFamily="{StaticResource MonoFont}" FontSize="15" />
+                                    <TextBlock Text="{Binding KeywordWarning}" Style="{StaticResource WarningText}"
+                                               Visibility="{Binding KeywordWarning, Converter={StaticResource EmptyToVisibility}}" />
+
+                                    <TextBlock Text="Name" Style="{StaticResource FieldLabel}" />
+                                    <TextBox Text="{Binding SelectedSnippet.Snippet.Name, UpdateSourceTrigger=PropertyChanged}" />
+
+                                    <DockPanel Margin="0,12,0,4">
+                                        <Button x:Name="InsertPlaceholderButton" DockPanel.Dock="Right" Click="InsertPlaceholder_Click" Padding="10,3"
+                                                ToolTip="Insert dynamic content such as the date, clipboard, cursor position or a fill-in field">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="&#xE710;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="11" VerticalAlignment="Center" Margin="0,0,6,0" />
+                                                <TextBlock Text="Insert placeholder" />
+                                            </StackPanel>
+                                        </Button>
+                                        <TextBlock Text="Expands to" FontWeight="SemiBold" VerticalAlignment="Bottom" />
+                                    </DockPanel>
+                                    <TextBox x:Name="ContentBox" AutomationProperties.Name="Expansion" Text="{Binding SelectedSnippet.Snippet.Content, UpdateSourceTrigger=PropertyChanged}"
+                                             AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap" MinHeight="140" MaxHeight="300"
+                                             VerticalScrollBarVisibility="Auto" VerticalContentAlignment="Top" FontFamily="{StaticResource MonoFont}" />
+
+                                    <TextBlock Text="Preview" Style="{StaticResource FieldLabel}" />
+                                    <Border Background="{DynamicResource SubtleFillColorSecondaryBrush}" CornerRadius="6" Padding="10,8">
+                                        <TextBlock Text="{Binding PreviewText}" TextWrapping="Wrap" MaxHeight="200" TextTrimming="CharacterEllipsis" />
+                                    </Border>
+                                    <TextBlock Text="{Binding PreviewInfo}" Style="{StaticResource CaptionText}" Margin="0,4,0,0"
+                                               Visibility="{Binding PreviewInfo, Converter={StaticResource EmptyToVisibility}}" />
+
+                                    <TextBlock Text="Group" Style="{StaticResource FieldLabel}" />
+                                    <ComboBox ItemsSource="{Binding Library.Groups}" DisplayMemberPath="Name" SelectedItem="{Binding EditorGroup}" HorizontalAlignment="Stretch" />
+
+                                    <TextBlock Text="Expand" Style="{StaticResource FieldLabel}" />
+                                    <ComboBox ItemsSource="{Binding TriggerOptions}" DisplayMemberPath="Label" SelectedValuePath="Value"
+                                              SelectedValue="{Binding SelectedSnippet.Snippet.Trigger}" HorizontalAlignment="Stretch" />
+
+                                    <TextBlock Text="Letter case" Style="{StaticResource FieldLabel}" />
+                                    <ComboBox ItemsSource="{Binding CaseOptions}" DisplayMemberPath="Label" SelectedValuePath="Value"
+                                              SelectedValue="{Binding SelectedSnippet.Snippet.CaseMode}" HorizontalAlignment="Stretch" />
+
+                                    <TextBlock Text="Insert by" Style="{StaticResource FieldLabel}" />
+                                    <ComboBox ItemsSource="{Binding SnippetMethodOptions}" DisplayMemberPath="Label" SelectedValuePath="Value"
+                                              SelectedValue="{Binding SelectedSnippet.Snippet.InsertMethod}" HorizontalAlignment="Stretch" />
+
+                                    <TextBlock Text="Options" Style="{StaticResource FieldLabel}" />
+                                    <CheckBox Content="Enabled" IsChecked="{Binding SelectedSnippet.Snippet.Enabled}" />
+                                    <CheckBox Content="Also expand inside words (e.g. at the end of another word)" IsChecked="{Binding SelectedSnippet.Snippet.ExpandInsideWords}" />
+                                    <CheckBox Content="Don't re-type the trigger key (space, Enter…) after expanding" IsChecked="{Binding SelectedSnippet.Snippet.OmitDelimiter}" />
+                                    <CheckBox Content="Plain text: insert {placeholders} literally" IsChecked="{Binding SelectedSnippet.Snippet.PlainText}" />
+
+                                    <TextBlock Text="{Binding UsageText}" Style="{StaticResource CaptionText}" Margin="0,12,0,0" />
+                                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                                        <Button Command="{Binding DuplicateSnippetCommand}" Content="Duplicate" Margin="0,0,8,0" Padding="12,5" />
+                                        <Button Command="{Binding DeleteSnippetsCommand}" Content="Delete" Padding="12,5" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
+
+                    <!-- Playground -->
+                    <Border Grid.Row="1" Grid.ColumnSpan="5" Style="{StaticResource Pane}" Margin="0,10,0,0" Padding="12,8">
+                        <DockPanel>
+                            <TextBlock DockPanel.Dock="Top" Style="{StaticResource CaptionText}" Margin="0,0,0,6">
+                                <Run FontWeight="SemiBold" Text="Try it here." />
+                                <Run Text="Type a keyword followed by a space, e.g. ;btw  teh  ;date  :tada:  \alpha  ;shrug, and press Backspace right after an expansion to undo it." />
+                            </TextBlock>
+                            <TextBox x:Name="Playground" AutomationProperties.Name="Playground" Height="64" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                                     VerticalContentAlignment="Top" GotKeyboardFocus="Playground_GotKeyboardFocus" LostKeyboardFocus="Playground_LostKeyboardFocus" />
+                        </DockPanel>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <!-- ============================== SETTINGS ============================== -->
+            <TabItem Header="Settings">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="4,12,16,12" MaxWidth="920" HorizontalAlignment="Left">
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="General" Style="{StaticResource CardTitle}" />
+                                <CheckBox Content="Expand snippets as I type" IsChecked="{Binding Settings.ExpansionEnabled}" />
+                                <CheckBox Content="Start PhraseFlow when I sign in to Windows" IsChecked="{Binding Settings.StartWithWindows}" />
+                                <CheckBox Content="Start in the notification area (no window) when launched at sign-in" IsChecked="{Binding Settings.StartMinimized}" />
+                                <CheckBox Content="Play a soft sound when a snippet expands" IsChecked="{Binding Settings.PlaySound}" />
+                                <CheckBox Content="Show notifications (errors, shortcut conflicts)" IsChecked="{Binding Settings.ShowNotifications}" />
+                                <Grid Margin="0,10,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="220" />
+                                        <ColumnDefinition Width="320" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Theme" VerticalAlignment="Center" />
+                                    <ComboBox Grid.Column="1" ItemsSource="{Binding ThemeOptions}" DisplayMemberPath="Label" SelectedValuePath="Value" SelectedValue="{Binding Settings.Theme}" />
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="Trigger keys" Style="{StaticResource CardTitle}" />
+                                <TextBlock Style="{StaticResource SecondaryText}" Margin="0,0,0,8"
+                                           Text="Snippets set to expand &quot;after a trigger key&quot; expand when one of these follows the keyword. The trigger key is typed after the expansion unless the snippet says otherwise." />
+                                <WrapPanel>
+                                    <CheckBox Content="Space" IsChecked="{Binding Settings.TriggerOnSpace}" Margin="0,0,24,0" />
+                                    <CheckBox Content="Tab" IsChecked="{Binding Settings.TriggerOnTab}" Margin="0,0,24,0" />
+                                    <CheckBox Content="Enter" IsChecked="{Binding Settings.TriggerOnEnter}" />
+                                </WrapPanel>
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="220" />
+                                        <ColumnDefinition Width="320" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Trigger punctuation" VerticalAlignment="Center" />
+                                    <TextBox Grid.Column="1" Text="{Binding Settings.TriggerCharacters, UpdateSourceTrigger=PropertyChanged}" FontFamily="{StaticResource MonoFont}" />
+                                    <Button Grid.Column="2" Content="Reset" Command="{Binding ResetTriggerCharactersCommand}" Margin="8,0,0,0" />
+                                </Grid>
+                                <CheckBox Margin="0,12,0,0" IsChecked="{Binding Settings.BackspaceUndo}"
+                                          Content="Undo an expansion by pressing Backspace immediately afterwards" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="Inserting text" Style="{StaticResource CardTitle}" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="220" />
+                                        <ColumnDefinition Width="420" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="Method" VerticalAlignment="Center" />
+                                    <ComboBox Grid.Column="1" ItemsSource="{Binding GlobalMethodOptions}" DisplayMemberPath="Label" SelectedValuePath="Value" SelectedValue="{Binding Settings.InsertMethod}" />
+                                    <TextBlock Grid.Row="1" Text="Paste when longer than (characters)" VerticalAlignment="Center" Margin="0,8,0,0" />
+                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Settings.ClipboardThreshold}" Width="100" HorizontalAlignment="Left" Margin="0,8,0,0" />
+                                    <TextBlock Grid.Row="2" Text="Paste shortcut" VerticalAlignment="Center" Margin="0,8,0,0" />
+                                    <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding PasteOptions}" DisplayMemberPath="Label" SelectedValuePath="Value" SelectedValue="{Binding Settings.PasteShortcut}" Margin="0,8,0,0" />
+                                    <TextBlock Grid.Row="3" Text="Restore clipboard after (ms)" VerticalAlignment="Center" Margin="0,8,0,0" />
+                                    <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Settings.ClipboardRestoreDelayMs}" Width="100" HorizontalAlignment="Left" Margin="0,8,0,0" />
+                                    <TextBlock Grid.Row="4" Text="Delay between typed keys (ms)" VerticalAlignment="Center" Margin="0,8,0,0" />
+                                    <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Settings.TypingDelayMs}" Width="100" HorizontalAlignment="Left" Margin="0,8,0,0" />
+                                </Grid>
+                                <TextBlock Style="{StaticResource CaptionText}" Margin="0,10,0,0"
+                                           Text="Pasting is faster and keeps formatting intact in code editors; your clipboard content is restored and hidden from clipboard history. Add a typing delay for slow apps or remote desktop sessions." />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="Keyboard shortcuts" Style="{StaticResource CardTitle}" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="220" />
+                                        <ColumnDefinition Width="240" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="Search &amp; insert snippets" VerticalAlignment="Center" />
+                                    <views:HotkeyBox Grid.Column="1" Hotkey="{Binding Settings.PickerHotkey, Mode=TwoWay}" />
+                                    <TextBlock Grid.Column="2" Text="{Binding PickerHotkeyStatus}" Style="{StaticResource CaptionText}" VerticalAlignment="Center" Margin="12,0,0,0" />
+                                    <TextBlock Grid.Row="1" Text="Pause / resume expansion" VerticalAlignment="Center" Margin="0,8,0,0" />
+                                    <views:HotkeyBox Grid.Row="1" Grid.Column="1" Hotkey="{Binding Settings.ToggleHotkey, Mode=TwoWay}" Margin="0,8,0,0" />
+                                    <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding ToggleHotkeyStatus}" Style="{StaticResource CaptionText}" VerticalAlignment="Center" Margin="12,8,0,0" />
+                                </Grid>
+                                <TextBlock Style="{StaticResource CaptionText}" Margin="0,8,0,0" Text="Click a box and press the new key combination. Backspace or Delete clears it." />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="Excluded applications" Style="{StaticResource CardTitle}" />
+                                <TextBlock Style="{StaticResource SecondaryText}" Margin="0,0,0,8"
+                                           Text="PhraseFlow never expands snippets in these programs (one per line), for example password managers or games. Groups can also be limited to specific apps in their settings." />
+                                <TextBox Text="{Binding Settings.ExcludedApps, UpdateSourceTrigger=LostFocus}" AcceptsReturn="True" Height="96" TextWrapping="NoWrap"
+                                         VerticalScrollBarVisibility="Auto" VerticalContentAlignment="Top" FontFamily="{StaticResource MonoFont}" />
+                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                    <ComboBox Width="260" IsEditable="True" ItemsSource="{Binding RunningApps}" Text="{Binding RunningApp, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Button Content="Add" Command="{Binding AddExcludedAppCommand}" Margin="8,0,0,0" Padding="14,5" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="Advanced" Style="{StaticResource CardTitle}" />
+                                <CheckBox IsChecked="{Binding Settings.AllowScripts}"
+                                          Content="Allow {shell:…} and {powershell:…} placeholders to run commands (only if you trust your snippets)" />
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="220" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="Script timeout (seconds)" VerticalAlignment="Center" />
+                                    <TextBox Grid.Column="1" Text="{Binding Settings.ScriptTimeoutSeconds}" Width="100" />
+                                    <TextBlock Grid.Row="1" Text="Automatic backups to keep" VerticalAlignment="Center" Margin="0,8,0,0" />
+                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Settings.MaxBackups}" Width="100" Margin="0,8,0,0" />
+                                </Grid>
+                                <TextBlock Style="{StaticResource CaptionText}" Margin="0,12,0,4">
+                                    <Run Text="Data folder:" /> <Run Text="{Binding DataFolder, Mode=OneWay}" FontFamily="{StaticResource MonoFont}" />
+                                </TextBlock>
+                                <WrapPanel Margin="0,4,0,0">
+                                    <Button Content="Open data folder" Command="{Binding OpenDataFolderCommand}" Margin="0,0,8,8" Padding="12,5" />
+                                    <Button Content="Back up now" Command="{Binding BackupNowCommand}" Margin="0,0,8,8" Padding="12,5" />
+                                    <Button Content="Restore a backup…" Command="{Binding RestoreBackupCommand}" Margin="0,0,8,8" Padding="12,5" />
+                                    <Button Content="Restore default snippets" Command="{Binding RestoreDefaultsCommand}" Margin="0,0,8,8" Padding="12,5" />
+                                    <Button Content="Reset statistics" Command="{Binding ResetStatisticsCommand}" Margin="0,0,8,8" Padding="12,5" />
+                                </WrapPanel>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- ============================== PLACEHOLDERS ============================== -->
+            <TabItem Header="Placeholders">
+                <DockPanel Margin="4,12,4,4">
+                    <Border DockPanel.Dock="Top" Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="Dynamic content" Style="{StaticResource CardTitle}" />
+                            <TextBlock Style="{StaticResource SecondaryText}">
+                                <Run Text="Add placeholders in braces to any snippet:" />
+                                <Run Text="{}{name}" FontFamily="{StaticResource MonoFont}" />
+                                <Run Text="or" />
+                                <Run Text="{}{name:argument|argument}" FontFamily="{StaticResource MonoFont}" /><Run Text=". Placeholders can be nested, e.g." />
+                                <Run Text="{}{upper:{clipboard}}" FontFamily="{StaticResource MonoFont}" /><Run Text=". Unknown names stay as typed, so code with braces is safe; write" />
+                                <Run Text="\{date}" FontFamily="{StaticResource MonoFont}" />
+                                <Run Text="for a literal placeholder. Inside arguments, \| \{ \} and \\ are escapes. Double-click a row to copy its syntax." />
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+                    <DataGrid x:Name="PlaceholderGrid" ItemsSource="{Binding PlaceholdersView}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column"
+                              GridLinesVisibility="None" CanUserAddRows="False" IsSynchronizedWithCurrentItem="False" SelectionMode="Single"
+                              VirtualizingPanel.IsVirtualizingWhenGrouping="True" MouseDoubleClick="PlaceholderGrid_MouseDoubleClick">
+                        <DataGrid.GroupStyle>
+                            <GroupStyle ContainerStyle="{StaticResource CategoryGroupItem}" />
+                        </DataGrid.GroupStyle>
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Syntax" Width="300">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Syntax}" Style="{StaticResource KeywordText}" TextWrapping="Wrap" Margin="0,3" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="What it does" Width="2*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Margin="0,3" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Example" Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Margin="0,3">
+                                            <TextBlock Text="{Binding Example}" FontFamily="{StaticResource MonoFont}" TextWrapping="Wrap" />
+                                            <TextBlock Text="{Binding Result, StringFormat='→ {0}'}" Style="{StaticResource CaptionText}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </TabItem>
+
+            <!-- ============================== ABOUT ============================== -->
+            <TabItem Header="About">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="4,12,16,12" MaxWidth="900" HorizontalAlignment="Left">
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/Assets/PhraseFlow.png" Width="72" Height="72" VerticalAlignment="Top" />
+                                <StackPanel Margin="16,0,0,0">
+                                    <TextBlock Text="PhraseFlow" FontSize="24" FontWeight="SemiBold" />
+                                    <TextBlock Text="{Binding VersionText}" Style="{StaticResource SecondaryText}" />
+                                    <TextBlock Style="{StaticResource SecondaryText}" Margin="0,8,0,0" MaxWidth="640"
+                                               Text="A fast, modern text expander for Windows. Type a short keyword and PhraseFlow replaces it with the full phrase, in any application." />
+                                    <TextBlock Margin="0,12,0,0">
+                                        <Run Text="{Binding Statistics.TotalExpansions, StringFormat={}{0:N0}, Mode=OneWay}" FontWeight="SemiBold" /><Run Text=" expansions · " />
+                                        <Run Text="{Binding Statistics.CharactersSaved, StringFormat={}{0:N0}, Mode=OneWay}" FontWeight="SemiBold" /><Run Text=" characters you didn't have to type" />
+                                    </TextBlock>
+                                    <Button Content="Exit PhraseFlow" Command="{Binding ExitCommand}" HorizontalAlignment="Left" Padding="14,6" Margin="0,14,0,0"
+                                            ToolTip="Stop PhraseFlow completely (closing the window keeps it running in the notification area)" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="How to use it" Style="{StaticResource CardTitle}" />
+                                <TextBlock TextWrapping="Wrap" LineHeight="22">
+                                    • Type a keyword such as <Run FontFamily="{StaticResource MonoFont}" Text=";btw" /> and then a space or punctuation: it becomes "by the way".<LineBreak />
+                                    • Emoji shortcodes like <Run FontFamily="{StaticResource MonoFont}" Text=":rocket:" /> and many others expand immediately, with no trigger key needed.<LineBreak />
+                                    • Typos such as "teh" or "recieve" are corrected as you type; the case you type is preserved (Btw → By the way).<LineBreak />
+                                    • Press Backspace right after an expansion to get your original text back.<LineBreak />
+                                    • Press <Run Text="{Binding Settings.PickerHotkey, Mode=OneWay}" FontWeight="SemiBold" /> anywhere to search all snippets and insert one (Ctrl+Enter copies it instead).<LineBreak />
+                                    • Snippets can contain dates, the clipboard, fill-in forms, calculations, key presses and more; see the Placeholders tab.<LineBreak />
+                                    • Pause expansion from the tray icon or with <Run Text="{Binding Settings.ToggleHotkey, Mode=OneWay}" FontWeight="SemiBold" />.
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="Privacy" Style="{StaticResource CardTitle}" />
+                                <TextBlock Style="{StaticResource SecondaryText}"
+                                           Text="Keystrokes are only examined in memory to detect keywords; nothing you type is stored or sent anywhere. Your snippets live in a local JSON file in the data folder." />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+
+        <!-- Status bar -->
+        <Border Grid.Row="2" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource DividerStrokeColorDefaultBrush}" Padding="20,6" Margin="0,8,0,0">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Right" Text="{Binding LastExpansion}" Style="{StaticResource CaptionText}" TextTrimming="CharacterEllipsis" MaxWidth="520" />
+                <TextBlock Text="{Binding StatusText}" Style="{StaticResource CaptionText}" TextTrimming="CharacterEllipsis" />
+            </DockPanel>
+        </Border>
+    </Grid>
+</Window>

@@ -1,0 +1,23 @@
+{
+  "id": "personal",
+  "order": 80,
+  "name": "Personal (edit me)",
+  "description": "Your contact details. Replace the sample values with your own; other snippets such as ;sig use them.",
+  "defaults": { "trigger": "delimiter", "case": "insensitive" },
+  "snippets": [
+    [";myname", "{fullname}", "Your name"],
+    [";myemail", "your.name@example.com", "Personal email"],
+    [";myworkemail", "your.name@company.example", "Work email"],
+    [";myphone", "+1 (555) 010-0100", "Phone"],
+    [";mymobile", "+1 (555) 010-0199", "Mobile"],
+    [";myaddr", "123 Main Street\nAnytown, ST 12345\nUnited States", "Address"],
+    [";mycity", "Anytown", "City"],
+    [";mytitle", "Your Job Title", "Job title"],
+    [";mycompany", "Your Company", "Company"],
+    [";mysite", "https://example.com", "Website"],
+    [";mylinkedin", "https://www.linkedin.com/in/your-profile", "LinkedIn"],
+    [";mygithub", "https://github.com/your-username", "GitHub"],
+    [";mymeet", "https://example.com/your-meeting-link", "Meeting link"],
+    [";mybooking", "https://example.com/your-booking-page", "Booking page"]
+  ]
+}
