@@ -46,21 +46,40 @@ PhraseFlow pairs the polished editor and ready-made content of commercial text e
 
 ✅ supported · ❌ not supported · other text describes partial or conditional support
 
-| | **PhraseFlow** | TextExpander | PhraseExpress | Text Blaze | espanso | Beeftext | AutoHotkey |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Snippet editor | ✅ | ✅ | ✅ | ✅ web dashboard | ❌ YAML files | ✅ | ❌ script files |
-| Ready-made snippets | ✅ 1,822 included | Public groups to subscribe to | Spelling corrections | Template gallery | Optional packages | Emoji shortcodes | ❌ |
-| Fill-in forms | ✅ | ✅ | ✅ | Full forms on paid plans | ✅ | One text prompt | Scriptable |
-| Date math | ✅ incl. business days | Paid plans | ✅ incl. work days | ✅ | ✅ offsets in seconds | ✅ | Scriptable |
-| Case adaptation (`btw`, `Btw`, `BTW`) | ✅ | ✅ | First letter only | Via a command pack | ✅ | ❌ | ✅ |
-| Search picker | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
-| Per-app rules | ✅ global and per group | ✅ global and per group | ✅ per phrase | Websites, in the browser extension | ✅ | Global exclusion list | ✅ `#HotIf` |
-| Scripts | ✅ PowerShell, cmd (opt-in) | JavaScript on paid plans | ✅ macro language | Formulas and web requests | ✅ shell and scripts | ✅ PowerShell | ✅ full scripting language |
-| Imports other expanders | ✅ TextExpander, AutoHotkey, espanso, Beeftext, CSV | CSV | ✅ TextExpander (Mac), CSV, Excel | TextExpander, CSV | ❌ | TextExpander CSV, Breevy | ❌ |
-| Rich text and images | ❌ plain text | ✅ | ✅ | ✅ images on paid plans | ✅ | ❌ | Scriptable |
-| Sync and team sharing | ❌ | ✅ built in | Via Dropbox, OneDrive or SQL Server | ✅ built in | Sync the config folder yourself | ❌ | ❌ |
-| Platforms | Windows (x64, ARM64) | Windows, macOS, iOS, Chrome | Windows, macOS, iOS | Windows, macOS, Chrome | Windows, macOS, Linux | Windows | Windows |
-| Development | Active | Active | Active | Active | Active | Maintenance only; last release Dec 2022 | Active |
+**Compared with commercial text expanders**
+
+| | **PhraseFlow** | TextExpander | PhraseExpress | Text Blaze |
+| --- | --- | --- | --- | --- |
+| Snippet editor | ✅ | ✅ | ✅ | ✅ web dashboard |
+| Ready-made snippets | ✅ 1,822 included | Public groups to subscribe to | Spelling corrections | Template gallery |
+| Fill-in forms | ✅ | ✅ | ✅ | Full forms on paid plans |
+| Date math | ✅ incl. business days | Paid plans | ✅ incl. work days | ✅ |
+| Case adaptation (`btw`, `Btw`, `BTW`) | ✅ | ✅ | First letter only | Via a command pack |
+| Search picker | ✅ | ✅ | ✅ | ✅ |
+| Per-app rules | ✅ global and per group | ✅ global and per group | ✅ per phrase | Websites, in the browser extension |
+| Scripts | ✅ PowerShell, cmd (opt-in) | JavaScript on paid plans | ✅ macro language | Formulas and web requests |
+| Imports other expanders | ✅ TextExpander, AutoHotkey, espanso, Beeftext, CSV | CSV | ✅ TextExpander (Mac), CSV, Excel | TextExpander, CSV |
+| Rich text and images | ❌ plain text | ✅ | ✅ | ✅ images on paid plans |
+| Sync and team sharing | ❌ export/import only | ✅ built in | Via Dropbox, OneDrive or SQL Server | ✅ built in |
+| Platforms | Windows (x64, ARM64) | Windows, macOS, iOS, Chrome | Windows, macOS, iOS | Windows, macOS, Chrome |
+
+**Compared with free and open-source tools**
+
+| | **PhraseFlow** | espanso | Beeftext | AutoHotkey |
+| --- | --- | --- | --- | --- |
+| Snippet editor | ✅ | ❌ YAML files | ✅ | ❌ script files |
+| Ready-made snippets | ✅ 1,822 included | Optional packages | Emoji shortcodes | ❌ |
+| Fill-in forms | ✅ | ✅ | One text prompt | Scriptable |
+| Date math | ✅ incl. business days | ✅ offsets in seconds | ✅ | Scriptable |
+| Case adaptation (`btw`, `Btw`, `BTW`) | ✅ | ✅ | ❌ | ✅ |
+| Search picker | ✅ | ✅ | ✅ | ❌ |
+| Per-app rules | ✅ global and per group | ✅ | Global exclusion list | ✅ `#HotIf` |
+| Scripts | ✅ PowerShell, cmd (opt-in) | ✅ shell and scripts | ✅ PowerShell | ✅ full scripting language |
+| Imports other expanders | ✅ TextExpander, AutoHotkey, espanso, Beeftext, CSV | ❌ | TextExpander CSV, Breevy | ❌ |
+| Rich text and images | ❌ plain text | ✅ | ❌ | Scriptable |
+| Sync between PCs | ❌ export/import only | Keep the config folder in a synced folder | Move the combo folder to a synced folder | Keep the scripts in a synced folder |
+| Platforms | Windows (x64, ARM64) | Windows, macOS, Linux | Windows | Windows |
+| Development | Active | Active | Maintenance only; last release Dec 2022 | Active |
 
 ### Cost and license
 
