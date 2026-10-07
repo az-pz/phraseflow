@@ -1,5 +1,9 @@
 # PhraseFlow
 
+[![CI](https://github.com/az-pz/phraseflow/actions/workflows/ci.yml/badge.svg)](https://github.com/az-pz/phraseflow/actions/workflows/ci.yml)
+[![Latest release](https://img.shields.io/github/v/release/az-pz/phraseflow)](https://github.com/az-pz/phraseflow/releases/latest)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 **A fast, modern text expander for Windows.** Type a short keyword such as `;btw`, `teh` or `:tada:` and PhraseFlow replaces it with the full phrase, corrected word or emoji, in any application. Snippets can contain dynamic content (dates, the clipboard, fill-in forms, calculations, key presses…), and a Windows 11-style manager lets you organise them.
 
 ![PhraseFlow main window](docs/images/main.png)
@@ -27,9 +31,11 @@ PhraseFlow ships with **1,822 ready-to-use snippets** in 13 groups and is built 
 
 ## Getting started
 
-1. Download a release zip from CI (or build it, see below) and run `PhraseFlow.exe`.
-   * `PhraseFlow-…-win-x64.zip` / `win-arm64.zip`: single self-contained exe, nothing else to install.
+1. Download the zip for your PC from the [latest release](https://github.com/az-pz/phraseflow/releases/latest), unzip it anywhere and run `PhraseFlow.exe`.
+   * `PhraseFlow-…-win-x64.zip` (most PCs) or `PhraseFlow-…-win-arm64.zip` (Windows on ARM): a single self-contained exe, nothing else to install.
    * `PhraseFlow-…-framework-dependent.zip`: small download, requires the [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0).
+
+   PhraseFlow is not code-signed, so SmartScreen may show "Windows protected your PC"; choose **More info → Run anyway**. Every release lists SHA-256 checksums and carries a build provenance attestation, so you can check that GitHub Actions built the zip from this repository: `gh attestation verify PhraseFlow-1.0.0-win-x64.zip --repo az-pz/phraseflow` ([GitHub CLI](https://cli.github.com/manual/gh_attestation_verify)).
 2. The manager window opens. PhraseFlow keeps running in the notification area when you close it; use the tray icon to reopen, pause or exit.
 3. Try it in the **Try it here** box at the bottom of the window, or anywhere else: `;btw␣`, `teh␣`, `;date␣`, `:rocket:`, `\alpha␣`, `;shrug␣`.
 4. Edit the **Personal (edit me)** group with your own email, phone and address; `;sig` and other snippets reuse them.
@@ -125,7 +131,10 @@ dotnet build tests/PhraseFlow.E2E
 tests/PhraseFlow.E2E/bin/Debug/net10.0-windows/PhraseFlow.E2E.exe src/PhraseFlow.App/bin/Debug/net10.0-windows/PhraseFlow.exe
 ```
 
-The GitHub Actions workflow in `.github/workflows/ci.yml` builds, runs the unit tests and uploads the packaged zips.
+GitHub Actions workflows:
+
+* `.github/workflows/ci.yml` builds, runs the unit tests and uploads the packaged zips for every push to `main` and every pull request.
+* `.github/workflows/release.yml` publishes a release when a version tag is pushed. Set `<Version>` in `Directory.Build.props`, add a section for it to `CHANGELOG.md` (it becomes the release notes), then run `git tag -a v1.2.3 -m "PhraseFlow 1.2.3"` and `git push origin v1.2.3`. The workflow tests and packages the app, attests the zips and uploads them with `SHA256SUMS.txt`.
 
 ## Architecture
 
@@ -153,3 +162,7 @@ tools/                  icon generator and UI screenshot helpers
 ## Privacy
 
 Keystrokes are examined in memory only to detect keywords. Nothing you type is logged, stored or sent anywhere; snippets are saved in a local JSON file.
+
+## License
+
+PhraseFlow is released under the [MIT License](LICENSE).

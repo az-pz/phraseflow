@@ -1,0 +1,109 @@
+name: Release
+
+# Publishes a GitHub release when a version tag is pushed:
+#   1. set <Version> in Directory.Build.props and add a matching section to CHANGELOG.md
+#   2. git tag -a v1.2.3 -m "PhraseFlow 1.2.3" && git push origin v1.2.3
+# Run it manually with an existing tag to rebuild and republish that release.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing tag to build and publish, e.g. v1.0.0
+        required: true
+
+permissions:
+  contents: write     # create the release and upload its assets
+  id-token: write     # sign the build provenance attestations
+  attestations: write # store the attestations
+
+concurrency:
+  group: release-${{ inputs.tag || github.ref_name }}
+
+jobs:
+  release:
+    runs-on: windows-latest
+    env:
+      TAG: ${{ inputs.tag || github.ref_name }}
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+          persist-credentials: false
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - name: Check version
+        shell: pwsh
+        run: |
+          [xml]$props = Get-Content Directory.Build.props
+          $version = $props.Project.PropertyGroup.Version
+          if ($env:TAG -ne "v$version") { throw "Tag $env:TAG does not match <Version>$version</Version> in Directory.Build.props." }
+          "VERSION=$version" >> $env:GITHUB_ENV
+
+      - name: Test and package
+        shell: pwsh
+        run: ./build.ps1
+
+      - name: Checksums
+        shell: pwsh
+        run: |
+          $lines = Get-ChildItem dist -Filter *.zip | Sort-Object Name | ForEach-Object {
+              '{0}  {1}' -f (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant(), $_.Name
+          }
+          [IO.File]::WriteAllText((Join-Path (Resolve-Path dist) 'SHA256SUMS.txt'), ($lines -join "`n") + "`n")
+          Get-Content dist/SHA256SUMS.txt
+
+      - name: Attest build provenance
+        uses: actions/attest@v4
+        with:
+          subject-path: dist/*.zip
+
+      - name: Publish release
+        shell: pwsh
+        run: |
+          $changelog = Get-Content CHANGELOG.md -Raw
+          $section = [regex]::Match($changelog, "(?ms)^## \[$([regex]::Escape($env:VERSION))\][^\n]*\n(.*?)(?=^## \[|^\[[^\]]+\]:|\z)")
+          if (-not $section.Success) { throw "CHANGELOG.md has no section for $env:VERSION." }
+
+          $downloads = @'
+          ## Downloads
+
+          | File | Use it on |
+          | --- | --- |
+          | `PhraseFlow-{version}-win-x64.zip` | Most Windows 10/11 PCs. A single self-contained `PhraseFlow.exe`; nothing else to install. |
+          | `PhraseFlow-{version}-win-arm64.zip` | Windows on ARM devices. |
+          | `PhraseFlow-{version}-framework-dependent.zip` | Smaller download for PCs with the [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0). |
+
+          Unzip anywhere and run `PhraseFlow.exe`. The app is not code-signed, so Windows SmartScreen may show "Windows protected your PC"; choose **More info → Run anyway**.
+
+          **Verify the download:** compare its SHA-256 hash with `SHA256SUMS.txt`, or confirm that GitHub Actions built it from this repository:
+
+          ```
+          gh attestation verify PhraseFlow-{version}-win-x64.zip --repo {repo}
+          ```
+          '@
+          $notes = Join-Path $env:RUNNER_TEMP 'release-notes.md'
+          $body = $section.Groups[1].Value.Trim() + "`n`n" + $downloads.Replace('{version}', $env:VERSION).Replace('{repo}', $env:GITHUB_REPOSITORY)
+          [IO.File]::WriteAllText($notes, $body)
+
+          $assets = @(Get-ChildItem dist -Filter *.zip | ForEach-Object FullName) + (Join-Path (Resolve-Path dist) 'SHA256SUMS.txt')
+          $options = @('--title', "PhraseFlow $env:VERSION", '--notes-file', $notes)
+          if ($env:VERSION.Contains('-')) { $options += '--prerelease' }
+
+          gh release view $env:TAG --json tagName *> $null
+          if ($LASTEXITCODE -eq 0) {
+              gh release upload $env:TAG @assets --clobber
+              if ($LASTEXITCODE -ne 0) { throw 'Uploading the release assets failed.' }
+              gh release edit $env:TAG @options
+          }
+          else {
+              gh release create $env:TAG @assets @options --verify-tag
+          }
+
+          if ($LASTEXITCODE -ne 0) { throw 'Publishing the release failed.' }
