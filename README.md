@@ -12,22 +12,73 @@ PhraseFlow ships with **1,822 ready-to-use snippets** in 13 groups and is built 
 
 ## Highlights
 
-| Feature | What it does | Inspired by |
-| --- | --- | --- |
-| Keyword expansion everywhere | Global keyboard hook; works in browsers, Office, editors, chat apps, terminals | all expanders |
-| Trigger modes | *After a trigger key* (space, Tab, Enter, punctuation), *immediately*, or *picker only* per snippet; configurable trigger characters | AutoHotkey, espanso, TextExpander |
-| Word boundaries | `teh` is fixed, but `steh` is left alone; optional "expand inside words" | espanso `word`, AutoHotkey `?` |
-| Case propagation | `btw` → by the way, `Btw` → By the way, `BTW` → BY THE WAY | espanso `propagate_case`, AutoHotkey |
-| Dynamic content | 39 placeholders: dates with offsets and business days, time, clipboard, cursor position, fill-in fields, nested snippets, text transforms, counters, calculator, GUIDs, key presses, delays, scripts | TextExpander, PhraseExpress, Text Blaze, Beeftext |
-| Fill-in forms | Text, multi-line, drop-down, checkbox and date-picker fields with live preview | TextExpander, PhraseExpress, espanso forms |
-| Search picker | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Space</kbd> opens a searchable list; Enter inserts, Ctrl+Enter copies | Beeftext, espanso, TextExpander |
-| Backspace undo | Press Backspace right after an expansion to get the typed text back | espanso `undo_backspace` |
-| Smart insertion | Short text is typed; long or multi-line text is pasted and your clipboard is restored and kept out of clipboard history | espanso backends |
-| Keeps up with fast typing | Keys typed while an expansion is being inserted are held and replayed in order | AutoHotkey SendInput |
-| App rules | Global exclusion list (password managers by default) and per-group "only in" / "all except" app filters | espanso app configs, PhraseExpress |
-| Groups | Enable/disable groups, bulk-change keyword prefixes, move snippets between groups | Beeftext, TextExpander |
-| Import/export | PhraseFlow JSON, CSV/TSV (TextExpander), AutoHotkey hotstrings, espanso YAML, Beeftext JSON; export to JSON, CSV or AutoHotkey | — |
-| Safety nets | Automatic backups, restore defaults, portable mode, pause hotkey, tray icon | — |
+| Feature | What it does |
+| --- | --- |
+| Keyword expansion everywhere | Global keyboard hook; works in browsers, Office, editors, chat apps, terminals |
+| Trigger modes | *After a trigger key* (space, Tab, Enter, punctuation), *immediately*, or *picker only* per snippet; configurable trigger characters |
+| Word boundaries | `teh` is fixed, but `steh` is left alone; optional "expand inside words" |
+| Case propagation | `btw` → by the way, `Btw` → By the way, `BTW` → BY THE WAY |
+| Dynamic content | 39 placeholders: dates with offsets and business days, time, clipboard, cursor position, fill-in fields, nested snippets, text transforms, counters, calculator, GUIDs, key presses, delays, scripts |
+| Fill-in forms | Text, multi-line, drop-down, checkbox and date-picker fields with live preview |
+| Search picker | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Space</kbd> opens a searchable list; Enter inserts, Ctrl+Enter copies |
+| Backspace undo | Press Backspace right after an expansion to get the typed text back |
+| Smart insertion | Short text is typed; long or multi-line text is pasted and your clipboard is restored and kept out of clipboard history |
+| Keeps up with fast typing | Keys typed while an expansion is being inserted are held and replayed in order |
+| App rules | Global exclusion list (password managers by default) and per-group "only in" / "all except" app filters |
+| Groups | Enable/disable groups, bulk-change keyword prefixes, move snippets between groups |
+| Import/export | PhraseFlow JSON, CSV/TSV (TextExpander), AutoHotkey hotstrings, espanso YAML, Beeftext JSON; export to JSON, CSV or AutoHotkey |
+| Safety nets | Automatic backups, restore defaults, portable mode, pause hotkey, tray icon |
+
+## How PhraseFlow compares
+
+PhraseFlow pairs the polished editor and ready-made content of commercial text expanders with the freedom of open-source tools. Below it is compared with six popular text expanders for Windows. Details about the other products come from their official websites, documentation and support forums as of October 2026; features and prices change, so check each vendor's site before deciding.
+
+### What sets PhraseFlow apart
+
+* **Everything is free, for any use.** No subscription, snippet cap, premium tier or personal-use-only clause: date math, fill-in forms with date pickers, nested snippets and scripts are all included.
+* **Useful from the first minute.** 1,822 snippets in 13 groups (autocorrect, contractions, emoji, symbols, LaTeX, kaomoji, email phrases, developer and Markdown snippets) are installed and enabled out of the box, with nothing to subscribe to or install.
+* **Bring your snippets with you.** PhraseFlow imports TextExpander CSV exports, AutoHotkey hotstrings, espanso YAML and Beeftext JSON, so switching doesn't mean retyping your library.
+* **Private and offline by design.** No account, cloud or telemetry: PhraseFlow itself never connects to the internet. Snippets stay in a local JSON file (or next to the exe in portable mode), and pasted text is kept out of Windows clipboard history.
+* **Open source, graphical and actively maintained.** Beeftext, the other open-source expander here with a snippet editor, is in maintenance mode with no release since 2022; espanso and AutoHotkey are configured through text files.
+* **Made for Windows 11.** Fluent design with light and dark themes, native x64 and ARM64 builds, a single self-contained exe, and releases with checksums and build provenance attestations.
+
+### Features
+
+✅ supported · ❌ not supported · other text describes partial or conditional support
+
+| | **PhraseFlow** | TextExpander | PhraseExpress | Text Blaze | espanso | Beeftext | AutoHotkey |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Snippet editor | ✅ | ✅ | ✅ | ✅ web dashboard | ❌ YAML files | ✅ | ❌ script files |
+| Ready-made snippets | ✅ 1,822 included | Public groups to subscribe to | Spelling corrections | Template gallery | Optional packages | Emoji shortcodes | ❌ |
+| Fill-in forms | ✅ | ✅ | ✅ | Full forms on paid plans | ✅ | One text prompt | Scriptable |
+| Date math | ✅ incl. business days | Paid plans | ✅ incl. work days | ✅ | ✅ offsets in seconds | ✅ | Scriptable |
+| Case adaptation (`btw`, `Btw`, `BTW`) | ✅ | ✅ | First letter only | Via a command pack | ✅ | ❌ | ✅ |
+| Search picker | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
+| Per-app rules | ✅ global and per group | ✅ global and per group | ✅ per phrase | Websites, in the browser extension | ✅ | Global exclusion list | ✅ `#HotIf` |
+| Scripts | ✅ PowerShell, cmd (opt-in) | JavaScript on paid plans | ✅ macro language | Formulas and web requests | ✅ shell and scripts | ✅ PowerShell | ✅ full scripting language |
+| Imports other expanders | ✅ TextExpander, AutoHotkey, espanso, Beeftext, CSV | CSV | ✅ TextExpander (Mac), CSV, Excel | TextExpander, CSV | ❌ | TextExpander CSV, Breevy | ❌ |
+| Rich text and images | ❌ plain text | ✅ | ✅ | ✅ images on paid plans | ✅ | ❌ | Scriptable |
+| Sync and team sharing | ❌ | ✅ built in | Via Dropbox, OneDrive or SQL Server | ✅ built in | Sync the config folder yourself | ❌ | ❌ |
+| Platforms | Windows (x64, ARM64) | Windows, macOS, iOS, Chrome | Windows, macOS, iOS | Windows, macOS, Chrome | Windows, macOS, Linux | Windows | Windows |
+| Development | Active | Active | Active | Active | Active | Maintenance only; last release Dec 2022 | Active |
+
+### Cost and license
+
+| | Free option | Paid options | License | Account |
+| --- | --- | --- | --- | --- |
+| **PhraseFlow** | **Everything, for any use** | None | Open source ([MIT](LICENSE)) | Not needed |
+| [TextExpander](https://textexpander.com/pricing) | 5 active snippets; no date math or scripts | Subscription: Pro $60, Business $120 per user per year | Proprietary | Required |
+| [PhraseExpress](https://www.phraseexpress.com/shop/) | Private, non-commercial use only | One-time: Standard $99.95, Professional $149.95, Enterprise $249.95 per user, with 12 months of updates | Proprietary | Not needed |
+| [Text Blaze](https://blaze.today/plans/) | Limited snippets and sharing; full forms on paid plans | Subscription: Pro $35.88, Business $83.88 per user per year | Proprietary | Required |
+| [espanso](https://espanso.org) | Everything, for any use | None | Open source (GPL-3.0) | Not needed |
+| [Beeftext](https://github.com/xmichelo/Beeftext) | Everything, for any use | None | Open source (MIT) | Not needed |
+| [AutoHotkey](https://www.autohotkey.com) | Everything, for any use | None | Open source (GPL-2.0) | Not needed |
+
+Prices are in US dollars before tax, with yearly billing ($5 and $10 a month for TextExpander, $2.99 and $6.99 a month for Text Blaze); both also offer monthly billing at a higher price and custom enterprise plans.
+
+### When another tool may suit you better
+
+PhraseFlow focuses on fast, private text expansion on Windows. Consider TextExpander or Text Blaze if your team needs shared snippets or you want the same snippets on a Mac or phone, PhraseExpress for rich-text documents and deep macro automation, espanso for one configuration across Windows, macOS and Linux, and AutoHotkey to automate much more than text.
 
 ## Getting started
 
